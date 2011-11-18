@@ -9,6 +9,14 @@ A lightweight framework for positioning popovers against triggers links. It's a 
 
 It would probably work with earlier versions, but we haven't tested that.
 
+## What it Does
+
+- Visually positions the popover against the trigger element, regardless of where they are in the source order.
+- Toggles the Popover with a fade effect when you click the trigger
+- When clicking outside of the popover area, hides the popover.
+- Repositions the popover after a window resize to make sure it stays pinned to the right place.
+- Adds `.before` and `.after` empty elements to the popover. You can use these to create comic-bubble pointers using background images, or that type of thing.
+
 ## Usage
 
 Include the script and it's requirements.
