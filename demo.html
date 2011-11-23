@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CF Popover</title>
+	
+	<style type="text/css" media="screen">
+	/* Stripped-down CSS Normalize. Just here for the purpose
+	of looking good (it's not needed for the plugin to work.)
+	 -------------------------------------------------- */
+	html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+	
+	html {
+		height: 100%;
+	}
+	body {
+		min-height: 100%;
+	}
+	
+	body { margin: 0; font-size: 13px; line-height: 1.231; }
+
+	body, button, input, select, textarea { font-family: sans-serif; color: #222; }
+	
+	a { color: #00e; }
+	a:visited { color: #551a8b; }
+	a:hover { color: #06e; }
+	a:focus { outline: thin dotted; }
+
+	/* Improve readability when focused and hovered in all browsers: h5bp.com/h */
+	a:hover, a:active { outline: 0; }
+
+	ul, ol { margin: 1em 0; padding: 0 0 0 40px; }
+	dd { margin: 0 0 0 40px; }
+	nav ul, nav ol { list-style: none; list-style-image: none; margin: 0; padding: 0; }
+	
+	#container {
+		margin: 30px auto;
+		width: 800px;
+	}
+	
+	.section {
+		margin: 60px 0;
+	}
+	.section h1 {
+		margin: 40px 0;
+	}
+	
+	/* Popover styles
+	 -------------------------------------------------- */
+	/* Required style */
+	.popover {
+		position: absolute;
+	}
+	
+	/* Aesthetic styles */
+	.popover {
+		background: #333;
+		color: #fff;
+		-moz-border-radius: 5px; /* FF1+ */
+		-webkit-border-radius: 5px; /* Saf3+, Chrome */
+		-khtml-border-radius: 5px; /* Konqueror */
+		border-radius: 5px; /* Standard. IE9 */
+		padding: 10px;
+		width: 200px;
+	}
+
+	#popover2 .after {
+		border-bottom: 10px solid transparent;
+		border-left: 15px solid #333;
+		content: '';
+		bottom: -10px;
+		height: 0;
+		margin-left: -5px;
+		left: 50%;
+		position: absolute;
+		width: 0;
+	}
+	
+	#popover3 .after {
+		border-bottom: 10px solid transparent;
+		border-left: 15px solid #333;
+		content: '';
+		bottom: -10px;
+		height: 0;
+		left: 10px;
+		position: absolute;
+		width: 0;
+	}
+	</style>
+	
+	<!-- Include the libraries -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+	<script src="jquery.ui.position.min.js"></script>
+ 	<script src="jquery.cf.popover.js"></script>
+	
+	<!-- Invoke the popovers -->
+	<script type="text/javascript">
+		jQuery(function ($) {
+			$('#trigger1').popover();
+			
+			$('#trigger2').popover({
+				my: 'center bottom',
+				at: 'center top',
+				offset: '0 -12px'
+			});
+			
+			$('#trigger3').popover({
+				my: 'left bottom',
+				at: 'right top',
+				offset: '-5px -5px'
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="container">
+		<div class="section">
+			<h1>Simple Popover</h1>
+			
+			<a id="trigger1" href="#popover1">Open Popover</a>
+			<div id="popover1" class="popover">I'm a Popover</div>
+		</div>
+		
+		<div class="section">
+			<h1>Using .after element</h1>
+			
+			<a id="trigger2" href="#popover2">Open Popover</a>
+			<div id="popover2" class="popover">I'm a Popover</div>
+		</div>
+		
+		<div class="section">
+			<h1>Upper right-hand corner</h1>
+			
+			<a id="trigger3" href="#popover3">Open Popover</a>
+			<div id="popover3" class="popover">I'm a Popover</div>
+		</div>
+	</div><!--! end of #container -->
+</html>
