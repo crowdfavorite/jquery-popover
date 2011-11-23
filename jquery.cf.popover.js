@@ -37,7 +37,9 @@
 				};
 			}, this));
 
-			$('body').click($.proxy(this.hidePopover, this));
+			$('body').click($.proxy(function () {
+				this.$popover.fadeOut('fast');
+			}, this));
 
 			this.$popover.click(function (e) {
 				e.stopPropagation();
