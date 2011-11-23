@@ -63,13 +63,16 @@
 		
 		/* Calculate and position against trigger */
 		pinToTarget: function () {
-			var opts = this.opts;
-			this.$popover.position({
-				my: opts.my,
-				at: opts.at,
-				of: this.$trigger,
-				offset: opts.offset
-			});
+			var opts = this.opts,
+				defaultPosOpts = {
+					my: opts.my,
+					at: opst.at,
+					of: this.$trigger,
+					offet: opts.offset
+				},
+				posOpts = $.extend(defaultPosOpts, opts);
+			
+			this.$popover.position(posOpts);
 		},
 		
 		/* Debounced to prevent hitting lots of times while resizing happens.
