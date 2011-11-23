@@ -2,6 +2,21 @@
 
 A lightweight framework for positioning popovers against triggers links. It's a pretty thin wrapper for jQuery UI Position, which does most of the heavy lifting.
 
+JavaScript
+
+	$('.trigger').popover();
+
+HTML:
+
+	<a class="trigger" href="#popover1">Open Popover</a>
+	<div id="popover1">Popover FTW!</div>
+
+CSS:
+
+	#popover1 {
+		position:absolute;
+	}
+
 ## Requirements
 
 - jQuery 1.6+
@@ -17,7 +32,7 @@ It would probably work with earlier versions, but we haven't tested that.
 - Repositions the popover after a window resize to make sure it stays pinned to the right place.
 - Adds `.before` and `.after` empty elements to the popover. You can use these to create comic-bubble pointers using background images, or that type of thing.
 
-## Usage
+## How to Use It
 
 Include the script and it's requirements.
 
@@ -29,7 +44,6 @@ Popover markup consist of two parts:
 Sample markup:
 
 	<a class="trigger" href="#popover1">Open Popover</a>
-	
 	<div id="popover1">Popover FTW!</div>
 
 The popover element can live anywhere on the page. The script will automatically position the popover against the trigger.
