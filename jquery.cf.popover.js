@@ -8,7 +8,7 @@
  */
 ;(function ($) {
 	var Popover = function ($trigger, opts) {
-		$.extend(this.opts, opts);
+		this.opts = $.extend({}, this.opts, opts);
 		this.$trigger = $($trigger.get(0));
 		
 		this.$popover = $(this.$trigger.attr('href'));
