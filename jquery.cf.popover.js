@@ -24,7 +24,8 @@
 		opts: {
 			my: 'center bottom',
 			at: 'center top',
-			offset: '0 0'
+			offset: '0 0',
+			collision: 'flip'
 		},
 		
 		bindEvents: function () {
@@ -65,10 +66,7 @@
 		pinToTarget: function () {
 			var opts = this.opts,
 				defaultPosOpts = {
-					my: opts.my,
-					at: opst.at,
-					of: this.$trigger,
-					offet: opts.offset
+					of: this.$trigger
 				},
 				posOpts = $.extend(defaultPosOpts, opts);
 			
