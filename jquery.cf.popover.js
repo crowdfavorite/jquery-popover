@@ -20,12 +20,13 @@
 	Popover.prototype = {
 		timeout: null,
 		$win: $(window),
+		flippedX: false,
 		
 		opts: {
 			my: 'center bottom',
 			at: 'center top',
 			offset: '0 0',
-			collision: 'flip'
+			collision: 'flip flip'
 		},
 		
 		bindEvents: function () {
@@ -62,15 +63,61 @@
 			e.stopPropagation();
 		},
 		
+		/* Monkey-patched wrapper for UI Position's
+		$.fn.position function. Adds a hook for us to be able
+		to tell when something has been flipped using
+		collision detection. */
+		position: function ($el, opts) {
+			var that = this,
+				uiPositionFlip = $.ui.position.flip,
+				/* Keep a copy of this function around for restoration
+				after we're finished monkey-patching it. */
+				uiPositionFlipLeft = uiPositionFlip.left,
+				
+				monkeyFlipLeft = function (position, data) {
+					var collisionPos = data.collisionPosition,
+						/* Run the original first -- it modifies position
+						and data by reference. Store return value
+						anyway, since we want to make sure if they do
+						decide to return something in future the API
+						isn't broken */
+						out = uiPositionFlipLeft(position, data);
+
+					// Now that these are populated, we can test to see if we're flipped
+					if (collisionPos['left'] !== position['left']) {
+						that.flippedX = true;
+					}
+					else {
+						that.flippedX = false;
+					};
+
+					// Return value of original collision function
+					return out;
+				};
+
+			uiPositionFlip.left = monkeyFlipLeft;
+			$el.position(opts);
+			/* Leave things behind as we found them. */
+			uiPositionFlip.left = uiPositionFlipLeft;
+		},
+		
 		/* Calculate and position against trigger */
 		pinToTarget: function () {
-			var opts = this.opts,
+			var $popover = this.$popover,
+				opts = this.opts,
 				defaultPosOpts = {
 					of: this.$trigger
 				},
 				posOpts = $.extend(defaultPosOpts, opts);
 			
-			this.$popover.position(posOpts);
+			this.position(this.$popover, posOpts);
+			
+			if (this.flippedX) {
+				$popover.addClass('flipped-x');
+			}
+			else {
+				$popover.removeClass('flipped-x');
+			};
 		},
 		
 		/* Debounced to prevent hitting lots of times while resizing happens.
