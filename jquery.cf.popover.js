@@ -100,15 +100,27 @@
 			this.$win.resize($.proxy(this.pinToTargetDebounced, this));
 		},
 		
-		showPopover: function (e) {
-			this.$popover.fadeIn();
+		/* Method for showing the popover */
+		show: function (callback) {
+			this.$popover.fadeIn('medium', callback);
 			this.pinToTarget();
+		},
+		
+		/* Method for hiding the popover */
+		hide: function (callback) {
+			this.$popover.fadeOut('fast', callback);
+		},
+		
+		/* Event handler for showing popover */
+		showPopover: function (e) {
+			this.show();
 			e.preventDefault();
 			e.stopPropagation();
 		},
-		
+
+		/* Event handler for hiding popover */
 		hidePopover: function (e) {
-			this.$popover.fadeOut('fast');
+			this.hide();
 			e.preventDefault();
 			e.stopPropagation();
 		},
