@@ -7,26 +7,76 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 ;(function ($) {
+	/* Proxy this once to save computation */
+	var uiPosition = $.ui.position;
+	
+	/**
+	 * Constructor function for popovers
+	 */
 	var Popover = function ($trigger, opts) {
 		this.opts = $.extend({}, this.opts, opts);
 		this.$trigger = $($trigger.get(0));
 		
 		this.$popover = $(this.$trigger.attr('href'));
+		
 		this.$popover
 			.prepend('<span role="presentation" class="before"/>')
-			.append('<span role="presentation" class="after"/>');
-		this.$popover.hide();
+			.append('<span role="presentation" class="after"/>')
+			.hide();
 	};
 	Popover.prototype = {
 		timeout: null,
 		$win: $(window),
-		flippedX: false,
 		
 		opts: {
 			my: 'center bottom',
 			at: 'center top',
 			offset: '0 0',
-			collision: 'flip flip'
+			collision: 'flop flop'
+		},
+		
+		/**
+		 * Custom collision handling for popovers (access via "flop" keyword)
+		 * Identical to "flip", but adds class to element being flipped to let
+		 * you know when it has been changed from default position.
+		 * Functions get bound to this.$popover in the constructor.
+		 * Used as a monkey patch below.
+		 */
+		flop: {
+			left: function (position, data) {
+				var cPosition = data.collisionPosition,
+					$popover = $(this),
+					c = 'flipped-x',
+					out;
+				
+				/* Run the original first -- it modifies position
+				and data by reference. Store return value
+				anyway, since we want to make sure if they do
+				decide to return something in future the API
+				isn't broken */
+				out = uiPosition.flip.left(position, data);
+				
+				(cPosition.left !== position.left) ? $popover.addClass(c) : $popover.removeClass(c);
+				
+				return out;
+			},
+			top: function (position, data) {
+				var cPosition = data.collisionPosition,
+					$popover = $(this),
+					c = 'flipped-y',
+					out;
+
+				/* Run the original first -- it modifies position
+				and data by reference. Store return value
+				anyway, since we want to make sure if they do
+				decide to return something in future the API
+				isn't broken */
+				out = uiPosition.flip.top(position, data);
+
+				(cPosition.top !== position.top) ? $popover.addClass(c) : $popover.removeClass(c);
+				
+				return out;
+			}
 		},
 		
 		bindEvents: function () {
@@ -63,44 +113,6 @@
 			e.stopPropagation();
 		},
 		
-		/* Monkey-patched wrapper for UI Position's
-		$.fn.position function. Adds a hook for us to be able
-		to tell when something has been flipped using
-		collision detection. */
-		position: function ($el, opts) {
-			var that = this,
-				uiPositionFlip = $.ui.position.flip,
-				/* Keep a copy of this function around for restoration
-				after we're finished monkey-patching it. */
-				uiPositionFlipLeft = uiPositionFlip.left,
-				
-				monkeyFlipLeft = function (position, data) {
-					var collisionPos = data.collisionPosition,
-						/* Run the original first -- it modifies position
-						and data by reference. Store return value
-						anyway, since we want to make sure if they do
-						decide to return something in future the API
-						isn't broken */
-						out = uiPositionFlipLeft(position, data);
-
-					// Now that these are populated, we can test to see if we're flipped
-					if (collisionPos['left'] !== position['left']) {
-						that.flippedX = true;
-					}
-					else {
-						that.flippedX = false;
-					};
-
-					// Return value of original collision function
-					return out;
-				};
-
-			uiPositionFlip.left = monkeyFlipLeft;
-			$el.position(opts);
-			/* Leave things behind as we found them. */
-			uiPositionFlip.left = uiPositionFlipLeft;
-		},
-		
 		/* Calculate and position against trigger */
 		pinToTarget: function () {
 			var $popover = this.$popover,
@@ -108,16 +120,19 @@
 				defaultPosOpts = {
 					of: this.$trigger
 				},
-				posOpts = $.extend(defaultPosOpts, opts);
+				posOpts = $.extend(defaultPosOpts, opts),
+				flop;
 			
-			this.position(this.$popover, posOpts);
-			
-			if (this.flippedX) {
-				$popover.addClass('flipped-x');
-			}
-			else {
-				$popover.removeClass('flipped-x');
+			/* Monkey-patch in our custom collision handling */
+			flop = {
+				/* Bind our custom collision handling to the popover element */
+				left: $.proxy(this.flop.left, this.$popover),
+				top: $.proxy(this.flop.top, this.$popover)
 			};
+			
+			uiPosition.flop = flop;
+			$popover.position(posOpts);
+			uiPosition.flop = undefined;
 		},
 		
 		/* Debounced to prevent hitting lots of times while resizing happens.
