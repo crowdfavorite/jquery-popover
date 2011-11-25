@@ -116,19 +116,16 @@
 		/* Calculate and position against trigger */
 		pinToTarget: function () {
 			var $popover = this.$popover,
-				opts = this.opts,
-				defaultPosOpts = {
+				posOpts = $.extend({
 					of: this.$trigger
-				},
-				posOpts = $.extend(defaultPosOpts, opts),
-				flop;
-			
-			/* Monkey-patch in our custom collision handling */
-			flop = {
-				/* Bind our custom collision handling to the popover element */
-				left: $.proxy(this.flop.left, this.$popover),
-				top: $.proxy(this.flop.top, this.$popover)
-			};
+				}, this.opts),
+				
+				/* Monkey-patch in our custom collision handling */
+				flop = {
+					/* Bind our custom collision handling to the popover element */
+					left: $.proxy(this.flop.left, this.$popover),
+					top: $.proxy(this.flop.top, this.$popover)
+				};
 			
 			uiPosition.flop = flop;
 			$popover.position(posOpts);
