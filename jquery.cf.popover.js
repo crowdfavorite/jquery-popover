@@ -46,7 +46,7 @@
 			left: function (position, data) {
 				var cPosition = data.collisionPosition,
 					$popover = $(this),
-					c = 'flipped-x',
+					c = 'flopped-x',
 					out;
 				
 				/* Run the original first -- it modifies position
@@ -63,7 +63,7 @@
 			top: function (position, data) {
 				var cPosition = data.collisionPosition,
 					$popover = $(this),
-					c = 'flipped-y',
+					c = 'flopped-y',
 					out;
 
 				/* Run the original first -- it modifies position

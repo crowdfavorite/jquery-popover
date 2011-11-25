@@ -75,9 +75,11 @@ You can also pass options. This would make the popover appear at the right-top e
 
 ### Options
 
-- `my`: position of popover. Accepts [anything jQuery UI Position accepts](http://jqueryui.com/demos/position/).
-- `at`: position of popover against trigger . Accepts [anything jQuery UI Position accepts](http://jqueryui.com/demos/position/).
-- `offset`: any tweaks you would like to make to the position. Accepts [anything jQuery UI Position accepts](http://jqueryui.com/demos/position/).
+- `my`: position of popover. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
+- `at`: position of popover against trigger. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
+- `offset`: any tweaks you would like to make to the position. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
+- `collision`: the type of collision logic to run. Default "flop flop" -- a custom positioning plugin similar to "flip". Adds a `flopped-x` or `flopped-y` class to the popover when collision is in action. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
+- `using`: a functional option for tweaking positioning of the popover. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
 
 ### Advanced Use
 
