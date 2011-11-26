@@ -17,7 +17,7 @@
 		this.opts = $.extend({}, this.opts, opts);
 		this.$trigger = $($trigger.get(0));
 		
-		this.$popover = $(this.$trigger.attr('href'));
+		this.$popover = $(( this.opts.popover || this.$trigger.attr('href') ));
 		
 		this.$popover
 			.prepend('<span role="presentation" class="before"/>')
@@ -32,7 +32,8 @@
 			my: 'center bottom',
 			at: 'center top',
 			offset: '0 0',
-			collision: 'flop flop'
+			collision: 'flop flop',
+			popover: null
 		},
 		
 		/**
@@ -102,13 +103,19 @@
 		
 		/* Method for showing the popover */
 		show: function (callback) {
-			this.$popover.fadeIn('medium', callback);
+			this.$popover.fadeIn('medium', $.proxy(function () {
+				this.$trigger.trigger('popover-show-animation-complete');
+			}, this));
 			this.pinToTarget();
+			this.$trigger.trigger('popover-show');
 		},
 		
 		/* Method for hiding the popover */
-		hide: function (callback) {
-			this.$popover.fadeOut('fast', callback);
+		hide: function () {
+			this.$popover.fadeOut('fast', $.proxy(function () {
+				this.$trigger.trigger('popover-hide-animation-complete');
+			}, this));
+			this.$trigger.trigger('popover-hide-animation-complete');
 		},
 		
 		/* Event handler for showing popover */
