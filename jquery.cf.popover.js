@@ -116,7 +116,7 @@
 			this.$popover.fadeOut('fast', $.proxy(function () {
 				this.$trigger.trigger('popover-hide-animation-complete');
 			}, this));
-			this.$trigger.trigger('popover-hide-animation-complete');
+			this.$trigger.trigger('popover-hide');
 		},
 		
 		/* Event handler for showing popover */
