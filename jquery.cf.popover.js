@@ -38,7 +38,6 @@
 			offset: '0 0',
 			collision: 'flop flop',
 			popover: null,
-			manyTriggers: true,
 			thereCanBeOnlyOne: true
 		},
 		
@@ -72,14 +71,14 @@
 					$popover = $(this),
 					c = 'flopped-y',
 					out;
-
+					
 				/* Run the original first -- it modifies position
 				and data by reference. Store return value
 				anyway, since we want to make sure if they do
 				decide to return something in future the API
 				isn't broken */
 				out = uiPosition.flip.top(position, data);
-
+				
 				(cPosition.top !== position.top) ? $popover.addClass(c) : $popover.removeClass(c);
 				
 				return out;
@@ -88,42 +87,51 @@
 		
 		bindEvents: function () {
 			this.$trigger.click($.proxy(function (e) {
-				if (this.opts.thereCanBeOnlyOne) {
-					$('body').trigger('popover-hide-all');
-				};
-				if (this.$popover.is(':visible')) {
+				if (this.popoverIsOpen()) {
 					this.hidePopover(e);
 				}
 				else {
 					this.showPopover(e);
 				};
+				if (this.opts.thereCanBeOnlyOne) {
+					$('body').trigger('popover-hide-all');
+				};
 			}, this));
-
+			
 			$('body').click($.proxy(function () {
-				if (this.$popover.is(':visible')) {
+				if (this.popoverIsOpen()) {
 					this.hide();
 				}
 			}, this)).bind('popover-hide-all', $.proxy(function() {
-				if (this.opts.thereCanBeOnlyOne && this.$popover.is(':visible')) {
+				if (this.popoverIsOpen() && !this.currentTrigger()) {
 					this.hide(true);
 				};
 			}, this));
-
+			
 			this.$popover.click(function (e) {
 				e.stopPropagation();
 			});
-
+			
 			this.$win.resize($.proxy(this.pinToTargetDebounced, this));
 		},
 		
+		/* is the popover the this trigger open? */
+		popoverIsOpen: function() {
+			var opener = (this.$trigger.length == this.$trigger.filter(this.$popover.data('opener')).length);
+			return (this.$popover.is(':visible') && opener);
+		},
+		
+		/* is this trigger the last trigger clicked? */
+		currentTrigger: function() {
+			return (this.$trigger.length == this.$trigger.filter($.fn.popover.lastTrigger).length);
+		},
+		
 		/* Method for showing the popover */
-		show: function (callback) {
-			if (this.opts.manyTriggers) {
-				this.hide(true);
-			}
+		show: function (e) {
+			$.fn.popover.lastTrigger = this.$trigger;
 			this.$popover.fadeIn('medium', $.proxy(function () {
 				this.$trigger.trigger('popover-show-animation-complete');
-			}, this));
+			}, this)).data('opener', this.$trigger);
 			this.pinToTarget();
 			this.$trigger.trigger('popover-show');
 		},
@@ -146,9 +154,9 @@
 		showPopover: function (e) {
 			e.preventDefault();
 			e.stopPropagation();
-			this.show();
+			this.show(e);
 		},
-
+		
 		/* Event handler for hiding popover */
 		hidePopover: function (e) {
 			e.preventDefault();
@@ -184,13 +192,11 @@
 		}
 	};
 	
-	$.fn.popover = function (opts) {
-		var Popover = $.fn.popover.Popover;
+	var fn = $.fn;
+	
+	fn.popover = function (opts) {
+		var Popover = fn.popover.Popover;
 		
-		if (this.size() > 1) {
-			opts.manyTriggers = true;
-		}
-
 		this.each(function() {
 			var $this = $(this);
 			var popover = new Popover($this, opts);
@@ -205,6 +211,9 @@
 		
 		return this;
 	};
+	
+	fn.popover.lastTrigger = null;
+	
 	/* Expose constructor function for folks to duck-type when necessary */
-	$.fn.popover.Popover = Popover;
+	fn.popover.Popover = Popover;
 })(jQuery);
