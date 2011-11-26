@@ -24,6 +24,7 @@
 			.append('<span role="presentation" class="after"/>')
 			.hide();
 	};
+	
 	Popover.prototype = {
 		timeout: null,
 		$win: $(window),
@@ -174,6 +175,8 @@
 			Example: $('.trigger').data('popover').hidePopover(); */
 			$this.data('popover', popover);
 		});
+		
+		return this;
 	};
 	/* Expose constructor function for folks to duck-type when necessary */
 	$.fn.popover.Popover = Popover;
