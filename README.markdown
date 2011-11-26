@@ -80,6 +80,7 @@ You can also pass options. This would make the popover appear at the right-top e
 - `offset`: any tweaks you would like to make to the position. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
 - `collision`: the type of collision logic to run. Default "flop flop" -- a custom positioning plugin similar to "flip". Adds a `flopped-x` or `flopped-y` class to the popover when collision is in action. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
 - `using`: a functional option for tweaking positioning of the popover. Can be [anything UI Position accepts](http://jqueryui.com/demos/position/).
+- `popover`: by default, the popover is found via the trigger's href attribute. If you absolutely have to, you can override this by setting the popover property. Pass in a selector, jQuery object or anything else `$()` accepts.
 
 ### Advanced Use
 
