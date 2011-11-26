@@ -101,7 +101,7 @@
 			$('body').click($.proxy(function () {
 				if (this.popoverIsOpen()) {
 					this.hide();
-				}
+				};
 			}, this)).bind('popover-hide-all', $.proxy(function() {
 				if (this.popoverIsOpen() && !this.currentTrigger()) {
 					this.hide(true);
@@ -146,7 +146,7 @@
 			}
 			else {
 				this.$popover.fadeOut('fast', callback);
-			}
+			};
 			this.$trigger.trigger('popover-hide');
 		},
 		
