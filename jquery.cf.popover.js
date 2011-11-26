@@ -18,11 +18,14 @@
 		this.$trigger = $($trigger.get(0));
 		
 		this.$popover = $(( this.opts.popover || this.$trigger.attr('href') ));
+		this.$popover = $(this.$popover.get(0));
 		
-		this.$popover
-			.prepend('<span role="presentation" class="before"/>')
-			.append('<span role="presentation" class="after"/>')
-			.hide();
+		if (!this.$popover.hasClass('popover-before-after-applied')) {
+			this.$popover.addClass('popover-before-after-applied')
+				.prepend('<span role="presentation" class="before"/>')
+				.append('<span role="presentation" class="after"/>')
+				.hide();
+		}
 	};
 	
 	Popover.prototype = {
@@ -34,7 +37,9 @@
 			at: 'center top',
 			offset: '0 0',
 			collision: 'flop flop',
-			popover: null
+			popover: null,
+			manyTriggers: true,
+			thereCanBeOnlyOne: true
 		},
 		
 		/**
@@ -83,6 +88,9 @@
 		
 		bindEvents: function () {
 			this.$trigger.click($.proxy(function (e) {
+				if (this.opts.thereCanBeOnlyOne) {
+					$('body').trigger('popover-hide-all');
+				};
 				if (this.$popover.is(':visible')) {
 					this.hidePopover(e);
 				}
@@ -92,7 +100,13 @@
 			}, this));
 
 			$('body').click($.proxy(function () {
-				this.$popover.fadeOut('fast');
+				if (this.$popover.is(':visible')) {
+					this.hide();
+				}
+			}, this)).bind('popover-hide-all', $.proxy(function() {
+				if (this.opts.thereCanBeOnlyOne && this.$popover.is(':visible')) {
+					this.hide(true);
+				};
 			}, this));
 
 			this.$popover.click(function (e) {
@@ -104,6 +118,9 @@
 		
 		/* Method for showing the popover */
 		show: function (callback) {
+			if (this.opts.manyTriggers) {
+				this.hide(true);
+			}
 			this.$popover.fadeIn('medium', $.proxy(function () {
 				this.$trigger.trigger('popover-show-animation-complete');
 			}, this));
@@ -112,10 +129,16 @@
 		},
 		
 		/* Method for hiding the popover */
-		hide: function () {
-			this.$popover.fadeOut('fast', $.proxy(function () {
+		hide: function (immediate) {
+			var callback = $.proxy(function () {
 				this.$trigger.trigger('popover-hide-animation-complete');
-			}, this));
+			}, this);
+			if (immediate) {
+				this.$popover.hide(0, callback);
+			}
+			else {
+				this.$popover.fadeOut('fast', callback);
+			}
 			this.$trigger.trigger('popover-hide');
 		},
 		
@@ -163,6 +186,10 @@
 	
 	$.fn.popover = function (opts) {
 		var Popover = $.fn.popover.Popover;
+		
+		if (this.size() > 1) {
+			opts.manyTriggers = true;
+		}
 
 		this.each(function() {
 			var $this = $(this);
