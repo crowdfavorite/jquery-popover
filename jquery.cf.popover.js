@@ -121,16 +121,16 @@
 		
 		/* Event handler for showing popover */
 		showPopover: function (e) {
-			this.show();
 			e.preventDefault();
 			e.stopPropagation();
+			this.show();
 		},
 
 		/* Event handler for hiding popover */
 		hidePopover: function (e) {
-			this.hide();
 			e.preventDefault();
 			e.stopPropagation();
+			this.hide();
 		},
 		
 		/* Calculate and position against trigger */
