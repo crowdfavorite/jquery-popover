@@ -98,19 +98,17 @@
 				};
 			}, this));
 			
-			$('body').click($.proxy(function () {
+			$('body').click($.proxy(function (e) {
 				if (this.popoverIsOpen()) {
-					this.hide();
+					if (!$(this.$popover).has($(e.target)).length && this.$popover != e.target) {
+						this.hide();
+					}
 				};
 			}, this)).bind('popover-hide-all', $.proxy(function() {
 				if (this.popoverIsOpen() && !this.currentTrigger()) {
 					this.hide(true);
 				};
 			}, this));
-			
-			this.$popover.click(function (e) {
-				e.stopPropagation();
-			});
 			
 			this.$win.resize($.proxy(this.pinToTargetDebounced, this));
 		},
