@@ -86,7 +86,7 @@ You can also pass options. This would make the popover appear at the right-top e
 
 You can access methods and data for a popover after it's been initialized via the data API.
 
-	$('.trigger').data('popover').hidePopover();
+	$('.trigger').data('popover').hide(); // .hidePopover(event) can be used, but will stop propagation of the event
 	$('.trigger').data('popover').opts.my // value of 'my' option for this instance
 
 Duck-typing the constructor function for popovers is possible by changing:
