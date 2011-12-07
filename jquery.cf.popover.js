@@ -100,7 +100,7 @@
 			
 			$('body').click($.proxy(function (e) {
 				if (this.popoverIsOpen()) {
-					if (!$(this.$popover).has($(e.target)).length && this.$popover != e.target) {
+					if (!$(this.$popover).has($(e.target)).size() && !$(this.$popover).filter($(e.target)).size()) {
 						this.hide();
 					}
 				};
