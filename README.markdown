@@ -83,6 +83,7 @@ You can also pass options. This would make the popover appear at the right-top e
 - `popover`: by default, the popover is found via the trigger's href attribute. If you absolutely have to, you can override this by setting the popover property. Pass in a selector, jQuery object or anything else `$()` accepts.
 - `onShow`: function executed before the popover is shown
 - `onHide`: function executed after the popover is hidden
+
 ### Advanced Use
 
 You can access methods and data for a popover after it's been initialized via the data API.
