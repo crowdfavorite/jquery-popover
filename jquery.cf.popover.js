@@ -1,5 +1,5 @@
 /*!
- * CF Popover v1.0
+ * CF Popover v1.0.1
  * A lightweight framework for positioning iPad-style popover elements against triggers.
  *
  * Copyright 2011-2012, Crowd Favorite (http://crowdfavorite.com)
@@ -164,6 +164,9 @@
 		
 		/* Calculate and position against trigger */
 		pinToTarget: function () {
+			if (!this.popoverIsOpen()) {
+				return;
+			}
 			var $popover = this.$popover,
 				posOpts = $.extend({
 					of: this.$trigger
