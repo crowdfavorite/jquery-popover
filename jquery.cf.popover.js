@@ -1,5 +1,5 @@
 /*!
- * CF Popover v1.0.1
+ * CF Popover v1.1
  * A lightweight framework for positioning iPad-style popover elements against triggers.
  *
  * Copyright 2011-2012, Crowd Favorite (http://crowdfavorite.com)
@@ -146,6 +146,15 @@
 				this.$popover.fadeOut('fast', callback);
 			};
 			this.$trigger.trigger('popover-hide');
+		},
+
+		toggle: function(immediate) {
+			if (this.popoverIsOpen()) {
+				this.hide(immediate);
+			}
+			else {
+				this.show();
+			}
 		},
 		
 		/* Event handler for showing popover */
