@@ -1,5 +1,5 @@
 /*!
- * CF Popover v1.1
+ * CF Popover v1.2
  * A lightweight framework for positioning iPad-style popover elements against triggers.
  *
  * Copyright 2011-2012, Crowd Favorite (http://crowdfavorite.com)
