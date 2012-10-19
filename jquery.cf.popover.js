@@ -1,5 +1,5 @@
 /*!
- * CF Popover v1.1
+ * CF Popover v1.2
  * A lightweight framework for positioning iPad-style popover elements against triggers.
  *
  * Copyright 2011-2012, Crowd Favorite (http://crowdfavorite.com)
@@ -51,38 +51,49 @@
 		flop: {
 			left: function (position, data) {
 				var cPosition = data.collisionPosition,
-					$popover = $(this),
-					c = 'flopped-x',
-					out;
+					$popover = $(this);
 				
-				/* Run the original first -- it modifies position
-				and data by reference. Store return value
-				anyway, since we want to make sure if they do
-				decide to return something in future the API
-				isn't broken */
-				out = uiPosition.flip.left(position, data);
-				
-				(cPosition.left !== position.left) ? $popover.addClass(c) : $popover.removeClass(c);
+				// Modifies position and data by reference
+				var out = uiPosition.flip.left(position, data);
+
+				if (position.left !== undefined) {
+					$popover.toggleClass('flopped-x', cPosition.left !== position.left);
+				}
 				
 				return out;
 			},
 			top: function (position, data) {
 				var cPosition = data.collisionPosition,
-					$popover = $(this),
-					c = 'flopped-y',
-					out;
+					$popover = $(this);
 					
-				/* Run the original first -- it modifies position
-				and data by reference. Store return value
-				anyway, since we want to make sure if they do
-				decide to return something in future the API
-				isn't broken */
-				out = uiPosition.flip.top(position, data);
-				
-				(cPosition.top !== position.top) ? $popover.addClass(c) : $popover.removeClass(c);
+				// Modifies position and data by reference
+				var out = uiPosition.flip.top(position, data);
+
+				if (position.top !== undefined) {
+					$popover.toggleClass('flopped-y', cPosition.top !== position.top);
+				}
 				
 				return out;
 			}
+		},
+
+		positionPopover: function(position, data) {
+			var $popover = $(this);
+
+			if (data) {
+				var opener = $popover.data('opener'),
+					popover = $(opener).data('popover');
+					
+				if (popover && popover.opts && popover.opts.my) {
+					var my = popover.opts.my.split(' ');
+					if (my.length > 0) {
+						$popover.toggleClass('flopped-x', data.horizontal !== my[0]);
+						$popover.toggleClass('flopped-y', data.vertical !== (my.length > 1 ? my[1] : my[0]));
+					}
+				}
+			}
+
+			$popover.css(position);
 		},
 		
 		bindEvents: function () {
@@ -178,7 +189,8 @@
 			}
 			var $popover = this.$popover,
 				posOpts = $.extend({
-					of: this.$trigger
+					of: this.$trigger,
+					using: this.positionPopover
 				}, this.opts),
 				
 				/* Monkey-patch in our custom collision handling */
