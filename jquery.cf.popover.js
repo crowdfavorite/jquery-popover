@@ -92,7 +92,7 @@
 						this.hide();
 					}
 				};
-			}, this)).bind('popover-hide-all', $.proxy(function() {
+			}, this)).on('popover-hide-all', $.proxy(function() {
 				if (this.popoverIsOpen() && !this.currentTrigger()) {
 					this.hide(true);
 				};
@@ -215,3 +215,12 @@
 	/* Expose constructor function for folks to duck-type when necessary */
 	fn.popover.Popover = Popover;
 })(jQuery);
+
+jQuery(function($) {
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27) {
+			$.fn.popover.lastTrigger = null;
+			$('body').trigger('popover-hide-all');
+		}
+	});
+});
