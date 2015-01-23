@@ -214,4 +214,19 @@
 	
 	/* Expose constructor function for folks to duck-type when necessary */
 	fn.popover.Popover = Popover;
+
+	$(function() {
+		$('body').on('click.cf.popover.data-api', '[data-toggle="popover"]', function ( e ) {
+			var $this = $(this)
+			  , href = $this.attr('href')
+			  , $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7
+			  , options = $this.data();
+
+			e.preventDefault();
+
+			data = $this.data('popover');
+			if (!data) $this.popover(options).data('popover').show();
+		});
+	});
+
 })(jQuery);
